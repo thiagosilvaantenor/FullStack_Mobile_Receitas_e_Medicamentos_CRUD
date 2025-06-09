@@ -13,7 +13,7 @@ public class Medicamento {
     private Long id;
     @Column(name = "nome", nullable = false, length = 50)
     private String nome;
-    @Column(name = "composicao", nullable = false, length = 150)
+    @Column(name = "composicao", nullable = false, length = 200)
     private String composicao;
     @Column(name = "tipo", nullable = false)
     private String tipo;

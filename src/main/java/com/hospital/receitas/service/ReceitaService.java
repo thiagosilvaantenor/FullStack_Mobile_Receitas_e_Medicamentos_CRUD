@@ -43,4 +43,8 @@ public class ReceitaService {
     public void deletar(Long id){
         repository.deleteById(id);
     }
+
+    public List<Receita> buscarPorNomePaciente(String paciente) {
+        return repository.buscaReceitaPeloNomePaciente(paciente);
+    }
 }

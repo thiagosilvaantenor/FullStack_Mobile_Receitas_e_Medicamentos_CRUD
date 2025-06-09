@@ -23,7 +23,7 @@ public class ReceitaController {
         this.service = service;
         this.medicamentoService = medicamentoService;
     }
-
+    //Inserir dados da Receita
     @PostMapping
     public ResponseEntity<Receita> criarReceita(@RequestBody ReceitaDTO dto){
         if (dto != null) {
@@ -47,6 +47,7 @@ public class ReceitaController {
         }
         return ResponseEntity.badRequest().build();
     }
+    //Consultar todas as Receitas
     @GetMapping
     public ResponseEntity<List<ReceitaDTO>> exibirMedicamentos(){
         List<Receita> receitas = service.exibirReceitas();
@@ -61,7 +62,7 @@ public class ReceitaController {
         });
         return ResponseEntity.status(200).body(dtos);
     }
-
+    //Consultar dados de uma Receita
     @GetMapping("/{id}")
     public ResponseEntity<ReceitaDTO> exibirReceita(@PathVariable Long id){
         Optional<Receita> encontrado = service.buscarPorId(id);
@@ -74,6 +75,24 @@ public class ReceitaController {
         ));
     }
 
+    //Chamada da procedure
+    @GetMapping("/paciente/{nome}")
+    public ResponseEntity<List<ReceitaDTO>> exibirReceitasDoPaciente(@PathVariable String nome){
+        List<Receita> receitas = service.buscarPorNomePaciente(nome);
+        if(receitas.isEmpty())
+            return ResponseEntity.notFound().build();
+        List<ReceitaDTO> dtos = new ArrayList<>();
+        receitas.forEach(receita -> {
+            List<String> medicamentos = new ArrayList<>();
+            receita.getMedicamentos().forEach(medicamento -> {
+                medicamentos.add(medicamento.getNome());
+            });
+            dtos.add(new ReceitaDTO(receita.getDataReceita(), medicamentos, receita.getMedicoCRM(), receita.getPacienteNome()
+            ));
+        });
+        return ResponseEntity.status(200).body(dtos);
+    }
+    //Atualizar dados de uma receita
     @PutMapping("/{id}")
     public ResponseEntity<ReceitaDTO> atualizar(@PathVariable Long id, @RequestBody ReceitaDTO dados) {
 
@@ -106,7 +125,7 @@ public class ReceitaController {
                 new ReceitaDTO(encontrado.getDataReceita(), dados.medicamentos(), encontrado.getMedicoCRM(), encontrado.getPacienteNome()
         ));
     }
-
+    //Exclusão de uma receita
     @DeleteMapping("/{id}")
     public ResponseEntity<MedicamentoDTO> deletar(@PathVariable Long id) {
 
