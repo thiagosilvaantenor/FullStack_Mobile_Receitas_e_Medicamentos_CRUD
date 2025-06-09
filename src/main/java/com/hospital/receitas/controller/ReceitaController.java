@@ -8,7 +8,6 @@ import com.hospital.receitas.service.MedicamentoService;
 import com.hospital.receitas.service.ReceitaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,9 +48,75 @@ public class ReceitaController {
         return ResponseEntity.badRequest().build();
     }
     @GetMapping
-    public ResponseEntity<List<Receita>> exibirMedicamentos(){
+    public ResponseEntity<List<ReceitaDTO>> exibirMedicamentos(){
         List<Receita> receitas = service.exibirReceitas();
-        return ResponseEntity.status(200).body(receitas);
+        List<ReceitaDTO> dtos = new ArrayList<>();
+        receitas.forEach(receita -> {
+            List<String> medicamentos = new ArrayList<>();
+            receita.getMedicamentos().forEach(medicamento -> {
+                medicamentos.add(medicamento.getNome());
+            });
+            dtos.add(new ReceitaDTO(receita.getDataReceita(), medicamentos, receita.getMedicoCRM(), receita.getPacienteNome()
+                     ));
+        });
+        return ResponseEntity.status(200).body(dtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReceitaDTO> exibirReceita(@PathVariable Long id){
+        Optional<Receita> encontrado = service.buscarPorId(id);
+        if(encontrado.isEmpty())
+            return ResponseEntity.notFound().build();
+        Receita receita = encontrado.get();
+        List<String> medicamentos = new ArrayList<>();
+        receita.getMedicamentos().forEach(medicamento -> medicamentos.add(medicamento.getNome()));
+        return ResponseEntity.status(200).body(new ReceitaDTO(receita.getDataReceita(), medicamentos, receita.getMedicoCRM(), receita.getPacienteNome()
+        ));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ReceitaDTO> atualizar(@PathVariable Long id, @RequestBody ReceitaDTO dados) {
+
+        Optional<Receita> receita = service.buscarPorId(id);
+        if (receita.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        Receita encontrado = receita.get();
+
+        if (dados.dataReceita() != null)
+            encontrado.setDataReceita(dados.dataReceita());
+        if (dados.medicamentos() != null){
+            List<Medicamento> novosMed = new ArrayList<>();
+            dados.medicamentos().forEach(nome ->{
+                Optional<Medicamento> medicamento = medicamentoService.buscarPorNome(nome);
+                if (medicamento.isPresent()){
+                    novosMed.add(medicamento.get());
+                }
+            });
+            encontrado.getMedicamentos().clear();
+            encontrado.setMedicamentos(novosMed);
+        }
+        if (dados.medicoCRM() != null)
+            encontrado.setMedicoCRM(dados.medicoCRM());
+        if (dados.pacienteNome() != null)
+            encontrado.setPacienteNome(dados.pacienteNome());
+        service.atualizar(encontrado);
+
+        return ResponseEntity.ok().body(
+                new ReceitaDTO(encontrado.getDataReceita(), dados.medicamentos(), encontrado.getMedicoCRM(), encontrado.getPacienteNome()
+        ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MedicamentoDTO> deletar(@PathVariable Long id) {
+
+        Optional<Receita> receita = service.buscarPorId(id);
+        if (receita.isPresent()){
+            service.deletar(receita.get().getId());
+        } else{
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 
 }

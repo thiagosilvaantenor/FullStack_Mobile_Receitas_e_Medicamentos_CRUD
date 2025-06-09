@@ -40,18 +40,39 @@ public class MedicamentoController {
         });
         return ResponseEntity.status(200).body(medicamentos);
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<MedicamentoDTO> exibirMedicamento(@PathVariable Long id){
+        Optional<Medicamento> encontrado = service.buscarPorId(id);
+        if(encontrado.isEmpty())
+            return ResponseEntity.notFound().build();
+        Medicamento medicamento = encontrado.get();
+        return ResponseEntity.status(200).body(new MedicamentoDTO(
+                medicamento.getNome(), medicamento.getComposicao(), medicamento.getTipo(), medicamento.getQuantidade()
+        ));
+    }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<MedicamentoDTO> atualizar(@PathVariable Long id, @RequestBody MedicamentoDTO dados) {
 
         Optional<Medicamento> medicamento = service.buscarPorId(id);
-        if (medicamento.isPresent()){
-            //TODO: Atualização
+        if (medicamento.isEmpty()){
+            return ResponseEntity.badRequest().build();
         }
-        return null;
+        Medicamento encontrado = medicamento.get();
+        if (dados.nome() != null)
+            encontrado.setNome(dados.nome());
+        if (dados.tipo() != null)
+            encontrado.setTipo(dados.tipo());
+        if (dados.composicao() != null)
+            encontrado.setComposicao(dados.composicao());
+        if (dados.quantidade() > 0)
+            encontrado.setQuantidade(dados.quantidade());
+        service.atualizar(encontrado);
+        MedicamentoDTO atualizado = new MedicamentoDTO(encontrado.getNome(), encontrado.getComposicao(), encontrado.getTipo(), encontrado.getQuantidade());
+        return ResponseEntity.ok().body(atualizado);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<MedicamentoDTO> deletar(@PathVariable Long id) {
 
         Optional<Medicamento> medicamento = service.buscarPorId(id);

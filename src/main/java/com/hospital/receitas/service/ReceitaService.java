@@ -5,6 +5,7 @@ import com.hospital.receitas.repository.ReceitaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReceitaService {
@@ -29,5 +30,17 @@ public class ReceitaService {
 
     public List<Receita> exibirReceitas() {
         return repository.findAll();
+    }
+
+    public Optional<Receita> buscarPorId(Long id) {
+        return repository.findById(id);
+    }
+
+    public void atualizar(Receita receita){
+        repository.save(receita);
+    }
+
+    public void deletar(Long id){
+        repository.deleteById(id);
     }
 }

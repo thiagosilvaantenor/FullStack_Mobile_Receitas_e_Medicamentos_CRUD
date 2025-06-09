@@ -43,4 +43,8 @@ public class MedicamentoService {
     public Optional<Medicamento> buscarPorNome(String nome) {
         return repository.findByNome(nome);
     }
+
+    public void atualizar(Medicamento atualizado) {
+        repository.save(atualizado);
+    }
 }
