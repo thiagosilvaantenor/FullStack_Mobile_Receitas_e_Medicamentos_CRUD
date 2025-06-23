@@ -67,18 +67,11 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
     }
     setEnviando(true);
 
-    //FIXME: COMENTADO A FORMATAÇÃO PARA NUMBER DOS IDS DE MEDICAMENTO
-    // //Formata os ids para number
-    // let ids: Number[] = [];
-    // selectedMedicamentos.forEach((med) => {
-    //   ids.push(Number.parseInt(med));
-    // });
-
     //Cria um veto de ids dos medicamentos selecionados
     const medicamentoIds = selectedMedicamentos.map(med => med.id);
 
     //DTO
-    const newReceita = {
+    const receitaDTO = {
       dataReceita,
       medicamentoIds: medicamentoIds,
       medicoCRM,
@@ -89,10 +82,10 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
     if (id) {
       // Se existe um ID, é uma atualização
 
-      resultado = await atualizarReceita(id, newReceita);
+      resultado = await atualizarReceita(id, receitaDTO);
     } else {
       // Caso contrário, é uma nova receita
-      resultado = await addReceita(newReceita);
+      resultado = await addReceita(receitaDTO);
     }
     setEnviando(false);
     if (resultado) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Receita, ReceitaRequest } from "../../@types/IReceita";
-import { deleteReceita, fetchReceitas, fetchPacientesForFilter, exibirReceitasDoPaciente, atualizarReceita } from "../../service/serviceReceita";
+import { Receita} from "../../@types/IReceita";
+import { deleteReceita, fetchReceitas, fetchPacientesForFilter, exibirReceitasDoPaciente } from "../../service/serviceReceita";
 import { ActivityIndicator, Alert, Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../style/styles";
 import { Picker } from '@react-native-picker/picker';

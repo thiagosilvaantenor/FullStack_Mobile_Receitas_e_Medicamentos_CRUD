@@ -31,6 +31,10 @@ export const MedicamentoListScreen = ({ navigation }: any) => {
     }
   };
 
+  const handleUpdate = async (medicamento: Medicamento) => {
+    navigation.navigate('MedicamentoForm', { medicamentoEdit: medicamento });
+  }
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -59,14 +63,23 @@ export const MedicamentoListScreen = ({ navigation }: any) => {
               <View>
                 <Text style={styles.listItemTextBold}>Nome: {item.nome}</Text>
                 <Text style={styles.listItemText}>Tipo: {item.tipo}</Text>
-                <Text style={styles.listItemText}>Quantidade: {`${item.quantidade} ${item.tipo == 'Xarope' || 'Gotas' ? 'ml' : 'comprimidos'}`}</Text>
+                <Text style={styles.listItemText}>Quantidade: {`${item.quantidade} ${item.tipo === 'Xarope' || item.tipo === 'Gotas' ? 'ml' : 'comprimidos'}`}</Text>
+
+                <View style={styles.buttonGroup}>
+                  <TouchableOpacity
+                    style={styles.updateButton}
+                    onPress={() => handleUpdate(item)}
+                  >
+                    <Text style={styles.buttonGroupText}>Atualizar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDelete(item.id)}
+                  >
+                    <Text style={styles.buttonGroupText}>Excluir</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDelete(item.id)}
-              >
-                <Text style={styles.deleteButton}>Excluir</Text>
-              </TouchableOpacity>
             </View>
           )}
         />
