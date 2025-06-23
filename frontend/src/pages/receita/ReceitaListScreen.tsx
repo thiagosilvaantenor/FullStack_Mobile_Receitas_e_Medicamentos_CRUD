@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { Receita} from "../../@types/IReceita";
+import { Receita } from "../../@types/IReceita";
 import { deleteReceita, fetchReceitas, fetchPacientesForFilter, exibirReceitasDoPaciente } from "../../service/serviceReceita";
 import { ActivityIndicator, Alert, Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../style/styles";
 import { Picker } from '@react-native-picker/picker';
 import { Paciente } from "../../@types/IPacientePicker";
 
+
 // Tela de Lista de Receitas (Relatorio)
 export const ReceitaListScreen = ({ navigation }: any) => {
   const [receitas, setReceitas] = useState<Receita[]>([]);
   const [pacientesOptions, setPacienteOptions] = useState<Paciente[]>([]);
+
   const [selectedPaciente, setSelectedPaciente] = useState<string>('');
   const [loading, setLoading] = useState(true);
+
 
   const loadReceitas = async () => {
     setLoading(true);
@@ -119,9 +122,10 @@ export const ReceitaListScreen = ({ navigation }: any) => {
             <View style={styles.listItem}>
               <View>
                 <Text style={styles.listItemTextBold}>Nome do paciente: {item.pacienteNome}</Text>
+                {/*Formata a data para DD/MM/AAA*/}
                 <Text style={styles.listItemTextBold}>Data Emissão: {new Date(
-                item.dataReceita).toLocaleDateString()}</Text>
-                <Text style={styles.listItemText}>CRM do Médico: {item.medicoCRM}</Text>
+                  item.dataReceita).toLocaleDateString()}</Text>
+                <Text style={styles.listItemText}>Nome do Médico: {item.medicoNome}</Text>
                 <Text style={styles.listItemText}>Medicamentos:</Text>
                 {item.medicamentos.length > 0 ? (
                   item.medicamentos.map((med, index) => (
@@ -132,26 +136,26 @@ export const ReceitaListScreen = ({ navigation }: any) => {
                 ) : (
                   <Text style={styles.nestedItemText}>Nenhum medicamento associado.</Text>
                 )}
+                <Text style={styles.listItemText}>Observações: {item.observacoes}</Text>
+                {/*Btns de excluir e atualizar*/}
+                <View style={styles.buttonGroup}>
+                  <TouchableOpacity
+                    style={styles.updateButton}
+                    onPress={() => handleUpdate(item)}
+                  >
+                    <Text style={styles.buttonGroupText}>Atualizar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDelete(item.id)}
+                  >
+                    <Text style={styles.buttonGroupText}>Excluir</Text>
+                  </TouchableOpacity>
+                </View>
 
-              {/*Btns de excluir e atualizar*/}
-              <View style={styles.buttonGroup}>
-                <TouchableOpacity
-                  style={styles.updateButton}
-                  onPress={() => handleUpdate(item)}
-                >
-                  <Text style={styles.buttonGroupText}>Atualizar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDelete(item.id)}
-                >
-                  <Text style={styles.buttonGroupText}>Excluir</Text>
-                </TouchableOpacity>
               </View>
-              
             </View>
-            </View>
-              
+
           )}
         />
       )}

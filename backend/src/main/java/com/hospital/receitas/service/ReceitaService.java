@@ -24,10 +24,6 @@ public class ReceitaService {
         return null;
     }
 
-    public List<Receita> exibirMedicamentos(){
-        return  repository.findAll();
-    }
-
     public List<Receita> exibirReceitas() {
         return repository.findAll();
     }
@@ -46,5 +42,9 @@ public class ReceitaService {
 
     public List<Receita> buscarPorNomePaciente(String paciente) {
         return repository.buscaReceitaPeloNomePaciente(paciente);
+    }
+
+    public List<Receita> buscarPorNomeMedico(String medico) {
+        return repository.buscaReceitaPeloNomeMedico(medico);
     }
 }

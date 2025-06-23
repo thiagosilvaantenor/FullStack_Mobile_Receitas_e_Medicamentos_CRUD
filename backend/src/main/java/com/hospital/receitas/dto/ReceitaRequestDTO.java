@@ -6,6 +6,8 @@ import java.util.List;
 public record ReceitaRequestDTO(
     LocalDate dataReceita,
     List<Long> medicamentoIds, // <-- Uma lista de IDs de medicamentos
-    String medicoCRM,
-    String pacienteNome) {
+    String medicoNome,
+    String pacienteNome,
+    String observacoes
+) {
 }

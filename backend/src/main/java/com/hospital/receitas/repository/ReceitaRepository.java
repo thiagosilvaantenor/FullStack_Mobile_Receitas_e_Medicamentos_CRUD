@@ -11,4 +11,7 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long> {
     //Realiza a chamada da procedure que esta em V2__cria_procedure.sql
     @Query(value = "CALL pr_buscar_receita_pelo_nome_paciente(:nomeParam)", nativeQuery = true)
     List<Receita> buscaReceitaPeloNomePaciente(@Param("nomeParam") String nomeParam);
+
+    @Query(value = "CALL pr_buscar_receita_pelo_nome_medic(:medico_nome)", nativeQuery = true)
+    List<Receita> buscaReceitaPeloNomeMedico(@Param("medico_nome") String medico_nome);
 }

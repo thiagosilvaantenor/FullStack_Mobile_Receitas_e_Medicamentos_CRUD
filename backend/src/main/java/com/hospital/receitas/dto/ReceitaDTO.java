@@ -12,8 +12,9 @@ public record ReceitaDTO(
         LocalDate dataReceita,
         // receita vai ter uma lista de medicamentos
         List<Medicamento> medicamentos,
-        String medicoCRM,
-        String pacienteNome
+        String medicoNome,
+        String pacienteNome,
+        String observacoes
 ) {
 
 }

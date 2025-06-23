@@ -77,13 +77,6 @@ export const MedicamentoFormScreen = ({ navigation, route }: any) => {
           ))}
         </Picker>
       </View>
-{/* 
-      <TextInput
-        style={styles.input}
-        placeholder="Tipo Ex: (Xarope, Comprimido, Gotas)"
-        value={tipoSelecionado}
-        onChangeText={setTipoSelecionado}
-      /> */}
       <TextInput
         style={styles.input}
         placeholder="Quantidade Ex:(100, 10)"

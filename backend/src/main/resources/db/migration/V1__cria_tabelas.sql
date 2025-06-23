@@ -1,8 +1,9 @@
 CREATE TABLE receita (
                          receita_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                          receita_data DATE NOT NULL,
-                         medico_crm VARCHAR(11) NOT NULL,
-                         paciente_nome VARCHAR(50) NOT NULL
+                         medico_nome VARCHAR(50) NOT NULL,
+                         paciente_nome VARCHAR(50) NOT NULL,
+                         observacoes VARCHAR(100) NOT NULL
 );
 CREATE TABLE medicamento (
                              medicamento_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,

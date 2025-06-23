@@ -8,11 +8,11 @@ import { Medicamento } from "../@types/IMedicamento";
 // IMPORTANTE:
 // Se você está usando um DISPOSITIVO FÍSICO, você precisará usar o ENDEREÇO IP REAL(com ipConfig)
 // da sua máquina na rede (ex: '192.168.1.100'). Verifique o IP da sua máquina.
-
-//Trocar o valor de API_BASE_URL pelo valor do ip e o valor da porta que esta rodando o backend
-const API_BASE_URL = 'http://192.168.18.14:8080';
+// Caso esteja usando emulador android, descomente esta linha abaixo e comente a linha depois dela
+//const API_BASE_URL = 'http://10.0.2.2:8080'
+const API_BASE_URL = 'http://192.168.18.14:8080'; //Trocar o valor de API_BASE_URL pelo valor do ip e o valor da porta que esta rodando o backend
 export const fetchMedicamentos = async (): Promise<Medicamento[]> => {
-  try{
+  try {
     const response = await fetch(`${API_BASE_URL}/medicamento`);
     if (!response.ok) {
       throw new Error(`Erro ao buscar medicamentos: ${response.statusText}`);

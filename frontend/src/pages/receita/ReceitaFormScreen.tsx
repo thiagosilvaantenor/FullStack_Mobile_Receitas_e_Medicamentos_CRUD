@@ -6,9 +6,8 @@ import {
   addReceita,
   atualizarReceita
 } from "../../service/serviceReceita";
-
-import { Receita } from "../../@types/IReceita";
-import { ActivityIndicator, Alert, Button, ScrollView, Text, TextInput, TouchableOpacity } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { ActivityIndicator, Alert, Button, ScrollView, Text, TextInput, TouchableOpacity, Pressable, Platform } from "react-native";
 
 
 
@@ -18,9 +17,13 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
   const { receitaEdit } = route.params || {};
 
   const [id, setId] = useState<string | undefined>(receitaEdit?.id); // ID só existe se for edição
-  const [dataReceita, setDataReceita] = useState(receitaEdit?.dataReceita || '');
-  const [medicoCRM, setMedicoCRM] = useState(receitaEdit?.medicoCRM || '');
+  //Data receita é uma string formatada para o padrão data brasileiro
+  const [dataReceita, setDataReceita] = useState(receitaEdit?.dataReceita ? new Date(receitaEdit.dataReceita).toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [medicoNome, setMedicoNome] = useState(receitaEdit?.medicoNome || '');
   const [pacienteNome, setPacienteNome] = useState(receitaEdit?.pacienteNome || '');
+  const [observacoes, setObservacoes] = useState(receitaEdit?.observacoes || '');
   const [selectedMedicamentos, setSelectedMedicamentos] = useState<Medicamento[]>([]);
   const [medicamentosDisponiveis, setMedicamentosDisponiveis] = useState<Medicamento[]>([]);
   const [carregarMedicamentos, setCarregarMedicamentos] = useState(true);
@@ -36,6 +39,9 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
         receitaEdit.medicamentos.some((editedMed: Medicamento) => editedMed.id === med.id)
       );
       setSelectedMedicamentos(selecionados);
+    }// Se estiver editando e houver dataReceita, inicializa o 'date' para o DatePicker
+    if (receitaEdit?.dataReceita) {
+      setDate(new Date(receitaEdit.dataReceita));
     }
   }, [receitaEdit, medicamentosDisponiveis]);
 
@@ -60,8 +66,33 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
     );
   };
 
+  //Exibição do input de escolha de data
+  const toggleDatePicker = () => {
+    setShowDatePicker(!showDatePicker);
+  }
+  // Função para lidar com eventos de mudança no DatePicker e no Text de dataReceita
+  const onChange = (event: any, selectedDate: Date | undefined) => {
+    // Para iOS, o DatePicker não é fechado automaticamente, então sempre o escondemos.
+    // Para Android, ele é fechado automaticamente no 'set', mas não no 'cancel'.
+    if (Platform.OS === 'android') {
+      setShowDatePicker(false);
+    }
+    if (event.type == "set" && selectedDate) {
+      const currentDate = selectedDate;
+      //Date é exibido, o dataReceita é salvo
+      setDate(currentDate);
+      // Formata a data para exibir no TextInput (ex: YYYY-MM-DD)
+      const formattedDate = currentDate.toLocaleDateString('pt-BR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      setDataReceita(formattedDate);
+    }
+  }
+
   const handleSubmit = async () => {
-    if (!dataReceita || !pacienteNome || selectedMedicamentos.length === 0 || !medicoCRM) {
+    if (!dataReceita || !pacienteNome || selectedMedicamentos.length === 0 || !medicoNome || !observacoes) {
       Alert.alert('Erro', 'Por favor, preencha a data de da receita e o nome do paciente.');
       return;
     }
@@ -70,12 +101,21 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
     //Cria um veto de ids dos medicamentos selecionados
     const medicamentoIds = selectedMedicamentos.map(med => med.id);
 
+    // Formata a data para o padrão AAAA-MM-DD para o backend
+    // Usamos o objeto 'date' que está no formato Date()
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês é 0-indexado
+    const day = String(date.getDate()).padStart(2, '0');
+    const dataFormatada = `${year}-${month}-${day}`;
+
+
     //DTO
     const receitaDTO = {
-      dataReceita,
+      dataReceita: dataFormatada,
       medicamentoIds: medicamentoIds,
-      medicoCRM,
-      pacienteNome
+      medicoNome: medicoNome,
+      pacienteNome,
+      observacoes
     };
 
     let resultado = null;
@@ -95,20 +135,44 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ paddingBottom: 500 }}
+    >
       <Text style={styles.title}>{id ? 'Editar Receita' : 'Cadastrar Receita'}</Text>
+
+      <Text style={styles.subtitle}>Selecione a data de emissão: </Text>
+      <Pressable
+        onPress={toggleDatePicker}
+      >
+        <TextInput
+          style={styles.input}
+          placeholder="Data de Emissão (DD-MM-AAAA)"
+          value={dataReceita}
+          //onChangeText={setDataReceita}
+          //placeholderTextColor='#11182744'
+          editable={false}
+        //  onPressIn={toggleDatePicker}
+        />
+      </Pressable>
+      {showDatePicker && (
+        //Pega o valor em Date() para depois ser transformado em string
+        <DateTimePicker
+          mode="date"
+          display="spinner"
+          value={date}
+          onChange={onChange}
+        />
+      )}
+
+      {/*Exibe o seletor de data apenas quando showDatePicker == false*/}
+
+
       <TextInput
         style={styles.input}
-        placeholder="Data de Emissão (YYYY-MM-DD)"
-        value={dataReceita}
-        onChangeText={setDataReceita}
-        keyboardType="numbers-and-punctuation" // Sugestão para formato de data
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="CRM/ESTADO{NUMERO}"
-        value={medicoCRM}
-        onChangeText={setMedicoCRM}
+        placeholder="Digite o nome do médico"
+        value={medicoNome}
+        onChangeText={setMedicoNome}
         keyboardType="default"
       />
 
@@ -139,6 +203,16 @@ export const ReceitaFormScreen = ({ navigation, route }: any) => {
         placeholder="Nome do paciente"
         value={pacienteNome}
         onChangeText={setPacienteNome}
+        keyboardType="default"
+      />
+
+      <TextInput
+        style={styles.input}
+        multiline={true} // Enables multi-line input
+        numberOfLines={4} // Suggests an initial height of 4 lines
+        placeholder="Observações e instruções do médico"
+        value={observacoes}
+        onChangeText={setObservacoes}
         keyboardType="default"
       />
 

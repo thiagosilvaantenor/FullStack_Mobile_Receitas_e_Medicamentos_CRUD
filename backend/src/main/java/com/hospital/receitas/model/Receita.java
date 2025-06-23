@@ -21,16 +21,19 @@ public class Receita {
             joinColumns = @JoinColumn(name = "receita_id"),
             inverseJoinColumns = @JoinColumn(name = "medicamento_id"))
     private List<Medicamento> medicamentos;
-    @Column(name = "medico_crm", nullable = false, length = 11)
-    private String medicoCRM;
+    @Column(name = "medico_Nome", nullable = false, length = 50)
+    private String medicoNome;
     @Column(name = "paciente_nome", nullable = false, length = 50)
     private String pacienteNome;
+    @Column(name = "observacoes", nullable = false, length = 100)
+    private String observacoes;
 
     //Construtor sem id e lista
-    public Receita(LocalDate dataReceita, String medicoCRM, String pacienteNome) {
+    public Receita(LocalDate dataReceita, String medicoNome, String pacienteNome, String observacoes) {
         this.dataReceita = dataReceita;
-        this.medicoCRM = medicoCRM;
+        this.medicoNome = medicoNome;
         this.pacienteNome = pacienteNome;
+        this.observacoes = observacoes;
     }
 
     public Receita() {
@@ -51,12 +54,12 @@ public class Receita {
     public void setDataReceita(LocalDate dataReceita) {
         this.dataReceita = dataReceita;
     }
-    public String getMedicoCRM() {
-        return medicoCRM;
+    public String getMedicoNome() {
+        return medicoNome;
     }
 
-    public void setMedicoCRM(String medicoCRM) {
-        this.medicoCRM = medicoCRM;
+    public void setMedicoNome(String medicoCRM) {
+        this.medicoNome = medicoCRM;
     }
 
     public String getPacienteNome() {
@@ -73,5 +76,13 @@ public class Receita {
 
     public void setMedicamentos(List<Medicamento> medicamentos) {
         this.medicamentos = medicamentos;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
     }
 }
