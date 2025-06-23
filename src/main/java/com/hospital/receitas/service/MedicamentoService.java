@@ -4,7 +4,7 @@ import com.hospital.receitas.model.Medicamento;
 import com.hospital.receitas.repository.MedicamentoRepository;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +36,14 @@ public class MedicamentoService {
     public void deletar(Long id) {
         Optional<Medicamento> medicamento= repository.findById(id);
         if (medicamento.isPresent()){
+            //Itera sobre as receitas que contem o médicamento a ser removido
+            medicamento.get().getReceitas().forEach( receita -> {
+                    //remove o medicamento da lista da receita
+                    receita.getMedicamentos().remove(medicamento.get());
+            });
+            //Remove do bd o medicamento
             repository.delete(medicamento.get());
+
         }
     }
 

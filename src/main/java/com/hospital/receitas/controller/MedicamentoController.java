@@ -34,8 +34,8 @@ public class MedicamentoController {
     public ResponseEntity<List<MedicamentoDTO>> exibirMedicamentos(){
         List<MedicamentoDTO> medicamentos = new ArrayList<>();
         service.exibirMedicamentos().forEach( medicamento -> {
-            medicamentos.add(new MedicamentoDTO(
-                    medicamento.getNome(), medicamento.getComposicao(), medicamento.getTipo(), medicamento.getQuantidade()
+            medicamentos.add(new MedicamentoDTO( medicamento.getId(),
+                    medicamento.getNome(), medicamento.getTipo(), medicamento.getQuantidade()
                     ));
         });
         return ResponseEntity.status(200).body(medicamentos);
@@ -46,8 +46,8 @@ public class MedicamentoController {
         if(encontrado.isEmpty())
             return ResponseEntity.notFound().build();
         Medicamento medicamento = encontrado.get();
-        return ResponseEntity.status(200).body(new MedicamentoDTO(
-                medicamento.getNome(), medicamento.getComposicao(), medicamento.getTipo(), medicamento.getQuantidade()
+        return ResponseEntity.status(200).body(new MedicamentoDTO( medicamento.getId(),
+                medicamento.getNome(), medicamento.getTipo(), medicamento.getQuantidade()
         ));
     }
 
@@ -63,12 +63,11 @@ public class MedicamentoController {
             encontrado.setNome(dados.nome());
         if (dados.tipo() != null)
             encontrado.setTipo(dados.tipo());
-        if (dados.composicao() != null)
-            encontrado.setComposicao(dados.composicao());
-        if (dados.quantidade() > 0)
+
+        if (dados.quantidade() != null && dados.quantidade() > 0)
             encontrado.setQuantidade(dados.quantidade());
         service.atualizar(encontrado);
-        MedicamentoDTO atualizado = new MedicamentoDTO(encontrado.getNome(), encontrado.getComposicao(), encontrado.getTipo(), encontrado.getQuantidade());
+        MedicamentoDTO atualizado = new MedicamentoDTO( encontrado.getId(), encontrado.getNome(), encontrado.getTipo(), encontrado.getQuantidade());
         return ResponseEntity.ok().body(atualizado);
     }
 

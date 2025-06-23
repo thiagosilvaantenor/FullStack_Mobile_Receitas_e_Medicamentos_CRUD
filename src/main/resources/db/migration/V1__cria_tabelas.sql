@@ -7,7 +7,6 @@ CREATE TABLE receita (
 CREATE TABLE medicamento (
                              medicamento_id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
                              nome VARCHAR(50) NOT NULL,
-                             composicao VARCHAR(200) NOT NULL,
                              tipo VARCHAR(20) NOT NULL,
                              quantidade INT NOT NULL
 );
