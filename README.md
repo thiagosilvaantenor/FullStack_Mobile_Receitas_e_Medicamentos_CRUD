@@ -55,8 +55,8 @@ string nome, string tipo, number quantidade}]`<br> `(Falha) HTTP STATUS 200 Body
    - Retorna: `(Sucesso) HTTP STATUS 200 {number id,
 string nome, string tipo, number quantidade}`<br> `(Falha) HTTP STATUS 200 Body:{}`
 - PUT `/medicamento/{id}`: Atualiza campos do médicamento que tenha o id informado na URL
- - Recebe: `{<opcional> string nome, <opcional> string tipo, <opcional> number quantidade}`
- - Retorna: `(Sucesso)HTTP STATUS 200 Body:{number id,
+  - Recebe: `{<opcional> string nome, <opcional> string tipo, <opcional> number quantidade}`
+  - Retorna: `(Sucesso)HTTP STATUS 200 Body:{number id,
 string nome, string tipo, number quantidade}` <br> `(Falha) HTTP STATUS 400`
 - DELETE `/medicamento/{id}`: Deleta o médicamento que tenha o id informado na URL
- - Retorna: `HTTP STATUS 200` 
+  - Retorna: `HTTP STATUS 200` 
