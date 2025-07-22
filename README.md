@@ -9,19 +9,18 @@
 </div>
 
 ## Tecnologias
-Frontend
-- React Native
-- Expo
-- TypeScript
-- Node (para gerenciar dependências)
-Backend
-- Maven
-- Java
-- Spring
-- Flyway
-
-Banco de dados
-- MySQL
+- Frontend
+  - React Native
+  - Expo
+  - TypeScript
+   - Node (para gerenciar dependências)
+- Backend
+  - Maven
+  - Java
+  - Spring
+  - Flyway
+- Banco de dados
+  - MySQL
 
 ## Configurações
 - Necessario ter instalado o Node Js e o Maven
@@ -40,8 +39,10 @@ Banco de dados
    - usar o comando do maven `mvn install` para instalar dependências
    - usar o comando `mvn spring start` para iniciar o projeto
 
-## Backend
-### Medicamento
+## Preview
+
+### Backend
+#### Medicamento
 - POST, `/medicamento`: cria um médicamento
     - Recebe: `{number id,
 string nome, string tipo, number quantidade}`
@@ -61,7 +62,7 @@ string nome, string tipo, number quantidade}` <br> `(Falha) HTTP STATUS 400`
 - DELETE `/medicamento/{id}`: Deleta o médicamento que tenha o id informado na URL
   - Retorna: `(Sucesso) HTTP STATUS 200 | (Falha) HTTP STATUS 400`
     
-### Receita
+#### Receita
 - POST, `/receita`: cria uma receita
     - Recebe: `{  string(YYYY-MM-DD) dataReceita,
 		    number[] medicamentoIds,
@@ -106,3 +107,20 @@ string nome, string tipo, number quantidade}` <br> `(Falha) HTTP STATUS 400`
 		    string observacoes}` <br> `(Falha) HTTP STATUS 400`
 - DELETE `/receita/{id}`: Deleta a receita que tenha o id informado na URL
    - Retorna: ` (Sucesso) HTTP STATUS 200 | (Falha) HTTP STATUS 400`
+     
+ ### FrontEnd / Mobile
+ 
+ <div align="center">
+ <h2>Medicamento</h2>
+ <h3> Exibir, Cadastrar, Atualizar e Excluir Medicamentos </h3>
+ <img  width="40%" alt="medicamentos_preview" src="https://github.com/user-attachments/assets/65fd92af-a5c0-44ee-87a4-df31e29625eb" />
+ </div>
+
+ <div align="center">
+ <h2>Receita</h2>
+ <h3> Exibir, Cadastrar, Atualizar e Excluir <strong>Receitas</strong> </h3>
+ <img  width="40%" alt="receitas_preview" src="https://github.com/user-attachments/assets/d1ec8a43-6213-4bf5-ac77-5326e67b5e8c" />
+
+ <h3>Filtrar <strong>Receitas</strong> pelo nome do paciente</h3>
+ <img width="40%" alt="receitas_filtro_preview" src="https://github.com/user-attachments/assets/a6dc056b-7c12-4e00-936e-0ef12e86f6ac"/>
+ </div>
