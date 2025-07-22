@@ -59,4 +59,50 @@ string nome, string tipo, number quantidade}`<br> `(Falha) HTTP STATUS 200 Body:
   - Retorna: `(Sucesso)HTTP STATUS 200 Body:{number id,
 string nome, string tipo, number quantidade}` <br> `(Falha) HTTP STATUS 400`
 - DELETE `/medicamento/{id}`: Deleta o médicamento que tenha o id informado na URL
-  - Retorna: `HTTP STATUS 200` 
+  - Retorna: `(Sucesso) HTTP STATUS 200 | (Falha) HTTP STATUS 400`
+    
+### Receita
+- POST, `/receita`: cria uma receita
+    - Recebe: `{  string(YYYY-MM-DD) dataReceita,
+		    number[] medicamentoIds,
+		    string medicoNome,
+		    string pacienteNome,
+		    string observacoes}`
+    - Retorna: `(Sucesso) HTTP STATUS 201 Body: { number id,
+   string(YYYY-MM-DD) dataReceita,
+  Medicamento[] medicamentos,
+    string medicoNome,
+    string pacienteNome,
+    string observacoes}`<br> `(Falha) HTTP STATUS 400`
+- GET:
+  - `/receita`: retorna todos os receitas cadastrados
+    - Retorna: `(Sucesso) HTTP STATUS 200 Body:[ {  string(YYYY-MM-DD) dataReceita,
+		    number[] medicamentoIds,
+		    string medicoNome,
+		    string pacienteNome,
+		    string observacoes}]`<br> `(Falha) HTTP STATUS 200 Body:[]`
+  - `/receita/id`: retorna a receita que tenha o id informado na URL
+    - Retorna: `(Sucesso) HTTP STATUS 200 Body: {  string(YYYY-MM-DD) dataReceita,
+		    number[] medicamentoIds,
+		    string medicoNome,
+		    string pacienteNome,
+		    string observacoes}`<br> `(Falha) HTTP STATUS 200 Body:{}`
+  - `/receita/paciente/{nome}`: retorna as receitas do paciente cujo o nome será informado na URL
+    - Retorna: `(Sucesso) HTTP STATUS 200 Body: [ {  string(YYYY-MM-DD) dataReceita,
+		    number[] medicamentoIds,
+		    string medicoNome,
+		    string pacienteNome,
+		    string observacoes} ] , {...}`<br> `(Falha) HTTP STATUS 200 Body:{}`
+- PUT `/receita/{id}`: Atualiza campos da receita que tenha o id informado na URL
+   - Recebe: `Body:{ <opcional> string(YYYY-MM-DD) dataReceita,
+		    <opcional> number[] medicamentoIds,
+		    <opcional> string medicoNome,
+		    <opcional> string pacienteNome,
+		    <opcional> string observacoes}`
+   - Retorna: `(Sucesso)HTTP STATUS 200 Body:{  string(YYYY-MM-DD) dataReceita,
+		    number[] medicamentoIds,
+		    string medicoNome,
+		    string pacienteNome,
+		    string observacoes}` <br> `(Falha) HTTP STATUS 400`
+- DELETE `/receita/{id}`: Deleta a receita que tenha o id informado na URL
+   - Retorna: ` (Sucesso) HTTP STATUS 200 | (Falha) HTTP STATUS 400`
